@@ -1,7 +1,7 @@
 from django.db import models
+from scrapping_process.models import Seniority
 
 from providers.models import Provider
-from providers.models import Seniority
 
 
 class JobOffer(models.Model):

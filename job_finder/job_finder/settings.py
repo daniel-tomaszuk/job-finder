@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "offers",
     "providers",
+    "scrapping_process",
 ]
 
 MIDDLEWARE = [
