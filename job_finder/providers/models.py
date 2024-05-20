@@ -9,6 +9,9 @@ class Seniority(models.Model):
         # relations
         provider_configs = "provider_configs"
 
+    class Meta:
+        verbose_name_plural = "seniorities"
+
     class SeniorityName(models.TextChoices):
         JUNIOR = "junior", "junior"
         MID = "mid", "mid"
@@ -19,6 +22,9 @@ class Seniority(models.Model):
     name = models.CharField(
         max_length=16, choices=SeniorityName, default=SeniorityName.OTHER
     )
+
+    def __str__(self) -> str:
+        return self.name.title()
 
 
 class KeyWord(models.Model):
@@ -31,10 +37,28 @@ class KeyWord(models.Model):
 
     key_word = models.CharField(max_length=64)
 
+    def __str__(self) -> str:
+        return f"Key Word: {self.key_word.upper()}"
+
 
 class ProviderConfig(models.Model):
+
+    class Keys:
+        id = "id"
+        config_name = "config_name"
+        seniority = "seniority"
+        key_word = "key_word"
+
+        # relations
+        seniority = "seniority"
+        key_word = "key_word"
+
+    config_name = models.CharField(max_length=128)
     seniority = models.ManyToManyField(Seniority, related_name="provider_configs")
     key_word = models.ManyToManyField(KeyWord, related_name="provider_configs")
+
+    def __str__(self) -> str:
+        return f"Provider Config - {self.config_name}"
 
 
 class Provider(models.Model):
@@ -53,3 +77,6 @@ class Provider(models.Model):
     config = models.ForeignKey(
         ProviderConfig, related_name="providers", on_delete=models.PROTECT
     )
+
+    def __str__(self) -> str:
+        return f"Provider {self.name.title()}"

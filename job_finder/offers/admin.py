@@ -1,3 +1,8 @@
 from django.contrib import admin
 
-# Register your models here.
+from offers.models import JobOffer
+
+
+@admin.register(JobOffer)
+class JobOfferAdmin(admin.ModelAdmin):
+    pass
