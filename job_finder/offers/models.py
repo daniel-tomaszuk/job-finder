@@ -15,7 +15,7 @@ class JobOffer(models.Model):
         # relations
         provider = "provider"
 
-    link = models.CharField(max_length=512)
+    link = models.CharField(max_length=512, unique=True)
     seniority = models.CharField(
         max_length=16,
         choices=Seniority.SeniorityName,

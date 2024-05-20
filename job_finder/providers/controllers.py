@@ -58,7 +58,7 @@ class IndeedScrapperController:
         element = None
         found_jobs = []
         for step in scrapping_process_steps:
-            sleep(1)  # give page time to load
+            sleep(0.5)  # give page time to load
             selector: Selector = step.selector
             selector_type: Selector.SelectorType = selector.selector_type
             browser_selector: By | None = self.__SELECTORS_MAPPING.get(selector_type)
@@ -78,12 +78,25 @@ class IndeedScrapperController:
 
         job_offers: list[JobOffer] = []
         for job in found_jobs:
+            link: str = self.__get_final_job_url(job)
             job_offers.append(
                 JobOffer(
-                    link=job.get_attribute("href"),
+                    link=link,
                     short_description=job.text,
                     provider=provider,
                 )
             )
 
-        JobOffer.objects.bulk_create(job_offers, batch_size=20)
+        JobOffer.objects.bulk_create(job_offers, batch_size=20, ignore_conflicts=True)
+
+    @staticmethod
+    def __get_final_job_url(job) -> str:
+        """
+        Open new browser, access the link (follow redirections etc), return final link.
+        """
+        with BrowserManager() as new_browser:
+            link: str = job.get_attribute("href")
+            new_browser.get(link)
+            sleep(0.5)  # wait for new window to load
+            final_link: str = new_browser.current_url
+            return final_link
