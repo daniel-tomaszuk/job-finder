@@ -29,3 +29,6 @@ class JobOffer(models.Model):
         blank=True,
         on_delete=models.SET_NULL,
     )
+
+    def __str__(self) -> str:
+        return f"{self.provider} | {self.seniority} | {self.short_description}"

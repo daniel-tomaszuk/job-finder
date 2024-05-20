@@ -8,6 +8,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 
+from offers.models import JobOffer
 from providers.models import Provider
 
 
@@ -55,15 +56,34 @@ class IndeedScrapperController:
             provider.scrapping_process.steps.all().order_by(ScrappingStep.Keys.order)
         )
         element = None
+        found_jobs = []
         for step in scrapping_process_steps:
             sleep(1)  # give page time to load
             selector: Selector = step.selector
             selector_type: Selector.SelectorType = selector.selector_type
             browser_selector: By | None = self.__SELECTORS_MAPPING.get(selector_type)
+
             if step.is_input_step and element:
                 element.send_keys(step.key_words + Keys.RETURN)
                 continue
 
-            element = browser.find_element(
-                browser_selector, step.selector.selector_value
+            if step.get_many_elements:
+                found_jobs = browser.find_elements(
+                    browser_selector, step.selector.selector_value
+                )
+            else:
+                element = browser.find_element(
+                    browser_selector, step.selector.selector_value
+                )
+
+        job_offers: list[JobOffer] = []
+        for job in found_jobs:
+            job_offers.append(
+                JobOffer(
+                    link=job.get_attribute("href"),
+                    short_description=job.text,
+                    provider=provider,
+                )
             )
+
+        JobOffer.objects.bulk_create(job_offers, batch_size=20)

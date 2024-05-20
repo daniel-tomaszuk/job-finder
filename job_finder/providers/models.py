@@ -22,4 +22,4 @@ class Provider(models.Model):
     )
 
     def __str__(self) -> str:
-        return f"Provider {self.name.title()}"
+        return self.name.title()
