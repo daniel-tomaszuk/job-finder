@@ -16,7 +16,7 @@ class Provider(models.Model):
     base_link = models.CharField(max_length=512)
     scrapping_process = models.ForeignKey(
         ScrappingProcess,
-        related_name="provider_configs",
+        related_name="providers",
         null=True,
         on_delete=models.SET_NULL,
     )

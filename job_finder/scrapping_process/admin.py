@@ -7,6 +7,8 @@ from scrapping_process.models import ScrappingStep
 from scrapping_process.models import Selector
 from scrapping_process.models import Seniority
 
+from providers.models import Provider
+
 
 @admin.register(Seniority)
 class SeniorityAdmin(admin.ModelAdmin):
@@ -33,25 +35,35 @@ class SelectorAdmin(admin.ModelAdmin):
 
 @admin.register(ScrappingProcess)
 class SelectorAdmin(admin.ModelAdmin):
-    readonly_fields = ("related_scrapping_steps",)
+    list_display = (ScrappingProcess.Keys.name,)
+    readonly_fields = ("related_providers", "related_scrapping_steps")
 
     def related_scrapping_steps(self, obj: ScrappingProcess) -> str:
         related_steps: QuerySet[ScrappingStep] = ScrappingStep.objects.filter(
             process_id=obj.id
         ).order_by(ScrappingStep.Keys.order)
-        if not related_steps:
-            return "Process has no steps!"
+        return self.__get_related_object_html(related_steps)
 
-        related_steps_html: str = ""
-        for step in related_steps:
-            related_steps_html += (
-                f'<br><a href={self.__get_reverse_url(step)} target="_blank">{step}</a>'
+    def related_providers(self, obj: ScrappingProcess) -> str:
+        related_providers: QuerySet[Provider] = Provider.objects.filter(
+            scrapping_process_id=obj.id
+        )
+        return self.__get_related_object_html(related_providers)
+
+    def __get_related_object_html(self, objects_list: QuerySet) -> str:
+        if not objects_list:
+            return "No related objects!"
+
+        related_objects_html: str = ""
+        for obj in objects_list:
+            related_objects_html += (
+                f'<br><a href={self.__get_reverse_url(obj)} target="_blank">{obj}</a>'
             )
 
-        return format_html(related_steps_html)
+        return format_html(related_objects_html)
 
     @staticmethod
-    def __get_reverse_url(obj: ScrappingStep) -> str:
+    def __get_reverse_url(obj: ScrappingStep | Provider) -> str:
         return reverse_lazy(
             f"admin:{obj._meta.app_label}_{obj._meta.model_name}_change", args=(obj.id,)
         )

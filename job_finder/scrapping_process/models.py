@@ -71,7 +71,7 @@ class ScrappingProcess(models.Model):
 
         # relations
         steps = "steps"
-        provider_configs = "provider_configs"
+        provider_configs = "providers"
 
     name = models.CharField(max_length=128)
 
