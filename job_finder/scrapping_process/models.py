@@ -84,6 +84,7 @@ class ScrappingStep(models.Model):
         id = "id"
         name = "name"
         is_input_step = "is_input_step"
+        is_next_page_step = "is_next_page_step"
         get_many_elements = "get_many_elements"
         order = "order"
 
@@ -98,6 +99,7 @@ class ScrappingStep(models.Model):
     name = models.CharField(max_length=128)
     key_words = models.CharField(max_length=512, null=True, blank=True)
     is_input_step = models.BooleanField(default=False)
+    is_next_page_step = models.BooleanField(default=False)
     get_many_elements = models.BooleanField(default=False)
     order = models.PositiveIntegerField(default=0)
 

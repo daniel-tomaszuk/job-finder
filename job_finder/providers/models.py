@@ -1,4 +1,5 @@
 from django.db import models
+
 from scrapping_process.models import ScrappingProcess
 
 

@@ -2,12 +2,12 @@ from django.contrib import admin
 from django.db.models import QuerySet
 from django.urls import reverse_lazy
 from django.utils.html import format_html
+
+from providers.models import Provider
 from scrapping_process.models import ScrappingProcess
 from scrapping_process.models import ScrappingStep
 from scrapping_process.models import Selector
 from scrapping_process.models import Seniority
-
-from providers.models import Provider
 
 
 @admin.register(Seniority)
