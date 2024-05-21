@@ -1,3 +1,4 @@
+import contextlib
 from time import sleep
 
 from django.db.models import QuerySet
@@ -36,22 +37,21 @@ class IndeedScrapperController:
         Selector.SelectorType.selector_none: None,
     }
 
-    def get_results(self):
-        providers: QuerySet[Provider] = (
-            Provider.objects.select_related(
+    def get_results(self, provider_id: int):
+        provider = (
+            Provider.objects.filter(id=provider_id)
+            .select_related(
                 Provider.Keys.scrapping_process,
             )
             .prefetch_related(
                 f"{Provider.Keys.scrapping_process}__{ScrappingProcess.Keys.steps}",
                 f"{Provider.Keys.scrapping_process}__{ScrappingProcess.Keys.steps}__{ScrappingStep.Keys.selector}",
             )
-            .all()
+            .first()
         )
-        for provider in providers:
-            # TODO: OPTIMISE WITH CELERY - USE SEPARATE WORKER FOR EACH SO ITS PROCESSED QUICKER
-            with BrowserManager() as browser:
-                browser.get(provider.base_link)
-                self.__process_steps(browser=browser, provider=provider)
+        with BrowserManager() as browser:
+            browser.get(provider.base_link)
+            self.__process_steps(browser=browser, provider=provider)
 
     def __process_steps(self, browser, provider: Provider):
         scrapping_process_steps: QuerySet[ScrappingStep] = (
@@ -91,6 +91,8 @@ class IndeedScrapperController:
         job_offers: list[JobOffer] = []
         for job in found_jobs:
             link: str = self.__get_final_job_url(job)
+            if not link:
+                continue
             job_offers.append(
                 JobOffer(
                     link=link,
@@ -106,9 +108,11 @@ class IndeedScrapperController:
         """
         Open new browser, access the link (follow redirections etc), return final link.
         """
-        with BrowserManager() as new_browser:
+
+        with BrowserManager() as new_browser, contextlib.suppress(Exception):
             link: str = job.get_attribute("href")
             new_browser.get(link)
             sleep(2)
             final_link: str = new_browser.current_url
             return final_link
+        return ""
