@@ -89,7 +89,6 @@ class ScrappingStep(models.Model):
 
         # relations
         selector = "selector"
-        seniorities = "seniorities"
         key_words = "key_words"
         process = "process"
 
@@ -104,9 +103,6 @@ class ScrappingStep(models.Model):
 
     selector = models.ForeignKey(
         Selector, related_name="scrapping_steps", on_delete=models.CASCADE
-    )
-    seniorities = models.ManyToManyField(
-        Seniority, related_name="scrapping_steps", null=True, blank=True
     )
     process = models.ForeignKey(
         ScrappingProcess, related_name="steps", null=True, on_delete=models.CASCADE

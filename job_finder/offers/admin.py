@@ -7,7 +7,9 @@ from offers.models import JobOffer
 class JobOfferAdmin(admin.ModelAdmin):
     list_display = (
         JobOffer.Keys.provider,
-        JobOffer.Keys.seniority,
         JobOffer.Keys.short_description,
-        JobOffer.Keys.link,
+        JobOffer.Keys.external_link,
+        JobOffer.Keys.created_at,
+        JobOffer.Keys.updated_at,
     )
+    ordering = (f"-{JobOffer.Keys.created_at}",)

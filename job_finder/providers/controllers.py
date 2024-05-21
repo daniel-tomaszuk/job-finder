@@ -43,7 +43,7 @@ class IndeedScrapperController:
                 f"{Provider.Keys.scrapping_process}__{ScrappingProcess.Keys.steps}",
                 f"{Provider.Keys.scrapping_process}__{ScrappingProcess.Keys.steps}__{ScrappingStep.Keys.selector}",
             )
-            .first()
+            .last()
         )
 
         with BrowserManager() as browser:
