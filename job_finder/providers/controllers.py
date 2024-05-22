@@ -1,10 +1,14 @@
 import contextlib
+import logging
+import os
 from time import sleep
 
 from django.db.models import QuerySet
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.firefox.service import Service
 from selenium.webdriver.remote.webelement import WebElement
 
 from offers.models import JobOffer
@@ -13,19 +17,50 @@ from scrapping_process.models import ScrappingProcess
 from scrapping_process.models import ScrappingStep
 from scrapping_process.models import Selector
 
+loggerr = logging.getLogger()
+
+SLEEP_SECONDS = 1.5
+
 
 class BrowserManager:
-    BROWSER = webdriver.Firefox
+    WEBDRIVER = None
+    ENGINE_PATH: str = ""
+    BINARY_LOCATION: str = ""
 
     def __init__(self):
-        self.browser = self.BROWSER()
-        sleep(2)  # wait for new browser window to fully load
+        self.browser = None
+        if not self.WEBDRIVER or not self.ENGINE_PATH or not self.BINARY_LOCATION:
+            raise NotImplementedError
 
     def __enter__(self):
+        loggerr.info(f"Opening new browser - {self.browser}")
         return self.browser
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.browser.quit()
+        loggerr.info(f"Browser closed - {self.browser}")
+
+
+class FirefoxBrowserManager(BrowserManager):
+    WEBDRIVER = webdriver.Firefox
+    ENGINE_PATH = "~/geckodriver"
+    BINARY_LOCATION = "/usr/bin/firefox-esr"
+
+    def __init__(self):
+        super().__init__()
+
+        # Path to the manually downloaded geckodriver
+        geckodriver_path = os.path.expanduser(self.ENGINE_PATH)
+        service = Service(executable_path=geckodriver_path)
+        options = Options()
+        options.add_argument("--headless")
+        options.binary_location = self.BINARY_LOCATION
+
+        self.browser: webdriver.Firefox = self.WEBDRIVER(
+            service=service, options=options
+        )
+        sleep(SLEEP_SECONDS)  # wait for new browser window to fully load
+        loggerr.info(f"New browser initialized - {self.browser}")
 
 
 class IndeedScrapperController:
@@ -49,7 +84,7 @@ class IndeedScrapperController:
             )
             .first()
         )
-        with BrowserManager() as browser:
+        with FirefoxBrowserManager() as browser:
             browser.get(provider.base_link)
             self.__process_steps(browser=browser, provider=provider)
 
@@ -60,7 +95,7 @@ class IndeedScrapperController:
         element: WebElement | None = None
         for step in scrapping_process_steps:
             found_jobs: list[WebElement] = []
-            sleep(2)  # give page time to load
+            sleep(SLEEP_SECONDS)  # give page time to load
             selector: Selector = step.selector
             selector_type: Selector.SelectorType = selector.selector_type
             browser_selector: By | None = self.__SELECTORS_MAPPING.get(selector_type)
@@ -102,6 +137,7 @@ class IndeedScrapperController:
             )
 
         JobOffer.objects.bulk_create(job_offers, batch_size=20, ignore_conflicts=True)
+        loggerr.info(f"Saved {len(job_offers)} job offers")
 
     @staticmethod
     def __get_final_job_url(job) -> str:
@@ -109,10 +145,11 @@ class IndeedScrapperController:
         Open new browser, access the link (follow redirections etc), return final link.
         """
 
-        with BrowserManager() as new_browser, contextlib.suppress(Exception):
+        with FirefoxBrowserManager() as new_browser, contextlib.suppress(Exception):
             link: str = job.get_attribute("href")
             new_browser.get(link)
-            sleep(2)
+            loggerr.info(f"Accessing the link: {link}")
+            sleep(SLEEP_SECONDS)
             final_link: str = new_browser.current_url
             return final_link
         return ""

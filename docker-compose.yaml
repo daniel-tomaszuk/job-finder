@@ -1,6 +1,46 @@
+x-env-vars: &env-vars
+  env_file:
+    - .env.dev
 
 services:
+  base:
+    build:
+      dockerfile: ./Dockerfiles/Dockerfile.base
+      tags:
+        - base
+    <<: *env-vars
+
+  base-celery:
+    build:
+      dockerfile: ./Dockerfiles/Dockerfile.base.celery
+      tags:
+        - base-celery
+    depends_on:
+      - base
+    <<: *env-vars
+
   rabbitmq:
     image: "rabbitmq:3.13"
     ports:
+      # https://www.rabbitmq.com/docs/networking#ports
+      - "5671:5671"
       - "5672:5672"
+      - "4368:4369"
+
+  celery-worker:
+    build:
+      dockerfile: ./Dockerfiles/Dockerfile.celery
+    depends_on:
+      - base-celery
+      - rabbitmq
+    restart: on-failure
+    <<: *env-vars
+
+  celery-beat:
+    build:
+      dockerfile: ./Dockerfiles/Dockerfile.celery.beat
+    depends_on:
+      - base-celery
+      - rabbitmq
+    restart: on-failure
+    <<: *env-vars

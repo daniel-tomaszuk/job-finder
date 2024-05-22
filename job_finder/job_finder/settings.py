@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
+    "django_celery_beat",
     "offers",
     "providers",
     "scrapping_process",
@@ -129,4 +130,4 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
 # Celery
-CELERY_BROKER_URL: str = os.getenv("CELERY_BROKER_ULR", "amqp://guest@localhost//")
+CELERY_BROKER_URL: str = os.getenv("CELERY_BROKER_URL", "amqp://guest@0.0.0.0:5672//")

@@ -1,0 +1,3 @@
+FROM base-celery
+
+CMD celery -A job_finder worker -l INFO

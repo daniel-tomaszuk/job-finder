@@ -1,0 +1,6 @@
+FROM python:3.12-slim-bookworm as base
+RUN apt update --yes
+
+COPY ../job_finder ./app_job_finder
+WORKDIR ./app_job_finder
+RUN pip install -r requirements.txt
