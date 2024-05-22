@@ -81,8 +81,11 @@ WSGI_APPLICATION = "job_finder.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.getenv("POSTGRES_DB", "db_job_finder"),
+        "HOST": os.getenv("POSTGRES_HOST", "0.0.0.0"),
+        "USER": os.getenv("POSTGRES_USER", "db_user"),
+        "PASSWORD": os.getenv("POSTGRES_PASSWORD", "db_password"),
     }
 }
 
