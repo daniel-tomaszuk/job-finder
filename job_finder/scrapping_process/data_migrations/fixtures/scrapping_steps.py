@@ -1,0 +1,200 @@
+SCRAPPING_STEP_FIXTURES = """
+[
+   {
+      "model":"scrapping_process.scrappingstep",
+      "pk":1,
+      "fields":{
+         "name":"PL Indeed - Select Input",
+         "key_words":null,
+         "is_input_step":false,
+         "is_next_page_step":false,
+         "get_many_elements":false,
+         "order":0,
+         "selector_id":1,
+         "process_id":1
+      }
+   },
+   {
+      "model":"scrapping_process.scrappingstep",
+      "pk":2,
+      "fields":{
+         "name":"PL Indeed - Send Keys Input",
+         "key_words":"python django",
+         "is_input_step":true,
+         "is_next_page_step":false,
+         "get_many_elements":false,
+         "order":1,
+         "selector_id":2,
+         "process_id":1
+      }
+   },
+   {
+      "model":"scrapping_process.scrappingstep",
+      "pk":3,
+      "fields":{
+         "name":"PL Indeed -  Get Job Titles",
+         "key_words":null,
+         "is_input_step":false,
+         "is_next_page_step":false,
+         "get_many_elements":true,
+         "order":2,
+         "selector_id":3,
+         "process_id":1
+      }
+   },
+   {
+      "model":"scrapping_process.scrappingstep",
+      "pk":4,
+      "fields":{
+         "name":"UK Indeed - Select Input",
+         "key_words":null,
+         "is_input_step":false,
+         "is_next_page_step":false,
+         "get_many_elements":false,
+         "order":0,
+         "selector_id":1,
+         "process_id":2
+      }
+   },
+   {
+      "model":"scrapping_process.scrappingstep",
+      "pk":5,
+      "fields":{
+         "name":"UK Indeed - Send Keys Input",
+         "key_words":"python django",
+         "is_input_step":true,
+         "is_next_page_step":false,
+         "get_many_elements":false,
+         "order":1,
+         "selector_id":2,
+         "process_id":2
+      }
+   },
+   {
+      "model":"scrapping_process.scrappingstep",
+      "pk":6,
+      "fields":{
+         "name":"UK Indeed - Get Jobs Titles",
+         "key_words":null,
+         "is_input_step":false,
+         "is_next_page_step":false,
+         "get_many_elements":true,
+         "order":2,
+         "selector_id":3,
+         "process_id":2
+      }
+   },
+   {
+      "model":"scrapping_process.scrappingstep",
+      "pk":7,
+      "fields":{
+         "name":"PL Indeed - Pagination",
+         "key_words":null,
+         "is_input_step":false,
+         "is_next_page_step":true,
+         "get_many_elements":false,
+         "order":3,
+         "selector_id":4,
+         "process_id":1
+      }
+   },
+   {
+      "model":"scrapping_process.scrappingstep",
+      "pk":8,
+      "fields":{
+         "name":"PL Indeed - Get Job Titles",
+         "key_words":null,
+         "is_input_step":false,
+         "is_next_page_step":false,
+         "get_many_elements":true,
+         "order":4,
+         "selector_id":3,
+         "process_id":1
+      }
+   },
+   {
+      "model":"scrapping_process.scrappingstep",
+      "pk":9,
+      "fields":{
+         "name":"PL Indeed - Pagination",
+         "key_words":null,
+         "is_input_step":false,
+         "is_next_page_step":true,
+         "get_many_elements":false,
+         "order":5,
+         "selector_id":4,
+         "process_id":1
+      }
+   },
+   {
+      "model":"scrapping_process.scrappingstep",
+      "pk":10,
+      "fields":{
+         "name":"PL Indeed - Get Job Titles",
+         "key_words":null,
+         "is_input_step":false,
+         "is_next_page_step":false,
+         "get_many_elements":true,
+         "order":6,
+         "selector_id":3,
+         "process_id":1
+      }
+   },
+   {
+      "model":"scrapping_process.scrappingstep",
+      "pk":11,
+      "fields":{
+         "name":"UK Indeed - Pagination",
+         "key_words":null,
+         "is_input_step":false,
+         "is_next_page_step":true,
+         "get_many_elements":false,
+         "order":3,
+         "selector_id":4,
+         "process_id":2
+      }
+   },
+   {
+      "model":"scrapping_process.scrappingstep",
+      "pk":12,
+      "fields":{
+         "name":"UK Indeed - Get Jobs Titles",
+         "key_words":null,
+         "is_input_step":false,
+         "is_next_page_step":false,
+         "get_many_elements":true,
+         "order":4,
+         "selector_id":3,
+         "process_id":2
+      }
+   },
+   {
+      "model":"scrapping_process.scrappingstep",
+      "pk":13,
+      "fields":{
+         "name":"UK Indeed - Pagination",
+         "key_words":null,
+         "is_input_step":false,
+         "is_next_page_step":true,
+         "get_many_elements":false,
+         "order":5,
+         "selector_id":4,
+         "process_id":2
+      }
+   },
+   {
+      "model":"scrapping_process.scrappingstep",
+      "pk":14,
+      "fields":{
+         "name":"UK Indeed - Get Jobs Titles",
+         "key_words":null,
+         "is_input_step":false,
+         "is_next_page_step":false,
+         "get_many_elements":true,
+         "order":6,
+         "selector_id":3,
+         "process_id":2
+      }
+   }
+]
+"""

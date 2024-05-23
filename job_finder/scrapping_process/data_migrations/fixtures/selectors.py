@@ -1,0 +1,36 @@
+SELECTOR_FIXTURES = """
+[
+   {
+      "model":"scrapping_process.selector",
+      "pk":1,
+      "fields":{
+         "selector_type":"element_id",
+         "selector_value":"text-input-what"
+      }
+   },
+   {
+      "model":"scrapping_process.selector",
+      "pk":2,
+      "fields":{
+         "selector_type":"selector_none",
+         "selector_value":"None"
+      }
+   },
+   {
+      "model":"scrapping_process.selector",
+      "pk":3,
+      "fields":{
+         "selector_type":"class_name",
+         "selector_value":"jcs-JobTitle"
+      }
+   },
+   {
+      "model":"scrapping_process.selector",
+      "pk":4,
+      "fields":{
+         "selector_type":"css_selector",
+         "selector_value":"a[data-testid=\\"pagination-page-next\\"]"
+      }
+   }
+]
+"""

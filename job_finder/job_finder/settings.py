@@ -85,22 +85,24 @@ WSGI_APPLICATION = "job_finder.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 #  # TODO: ADD DATA MIGRATION - WHEN BOOTSTRAPPING, SOME SELECTORS SHOULD BE CREATED, POTENTIALLY WITH DESCRIPTION
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.sqlite3",
-#         "NAME": BASE_DIR / "db.sqlite3",
-#     }
-# }
-
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.getenv("POSTGRES_DB", "db_job_finder"),
-        "HOST": os.getenv("POSTGRES_HOST", "0.0.0.0"),
-        "USER": os.getenv("POSTGRES_USER", "db_user"),
-        "PASSWORD": os.getenv("POSTGRES_PASSWORD", "db_password"),
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
     }
 }
+
+
+#
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql",
+#         "NAME": os.getenv("POSTGRES_DB", "db_job_finder"),
+#         "HOST": os.getenv("POSTGRES_HOST", "0.0.0.0"),
+#         "USER": os.getenv("POSTGRES_USER", "db_user"),
+#         "PASSWORD": os.getenv("POSTGRES_PASSWORD", "db_password"),
+#     }
+# }
 
 
 # Password validation

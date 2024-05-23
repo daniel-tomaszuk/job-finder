@@ -4,9 +4,15 @@ from django.urls import reverse_lazy
 from django.utils.html import format_html
 
 from providers.models import Provider
+from scrapping_process.models import KeyWord
 from scrapping_process.models import ScrappingProcess
 from scrapping_process.models import ScrappingStep
 from scrapping_process.models import Selector
+
+
+@admin.register(KeyWord)
+class KeyWordAdmin(admin.ModelAdmin):
+    pass
 
 
 @admin.register(Selector)
@@ -15,7 +21,7 @@ class SelectorAdmin(admin.ModelAdmin):
 
 
 @admin.register(ScrappingStep)
-class SelectorAdmin(admin.ModelAdmin):
+class ScrappingStepAdmin(admin.ModelAdmin):
     list_display = (
         ScrappingStep.Keys.name,
         ScrappingStep.Keys.order,
@@ -28,19 +34,25 @@ class SelectorAdmin(admin.ModelAdmin):
 
 
 @admin.register(ScrappingProcess)
-class SelectorAdmin(admin.ModelAdmin):
+class ScrappingProcessAdmin(admin.ModelAdmin):
     list_display = (ScrappingProcess.Keys.name,)
     readonly_fields = ("related_providers", "related_scrapping_steps")
 
     def related_scrapping_steps(self, obj: ScrappingProcess) -> str:
+        if not obj.id:
+            return "No related objects!"
+
         related_steps: QuerySet[ScrappingStep] = ScrappingStep.objects.filter(
-            process_id=obj.id
+            process__id=obj.id
         ).order_by(ScrappingStep.Keys.order)
         return self.__get_related_object_html(related_steps)
 
     def related_providers(self, obj: ScrappingProcess) -> str:
+        if not obj.id:
+            return "No related objects!"
+
         related_providers: QuerySet[Provider] = Provider.objects.filter(
-            scrapping_process_id=obj.id
+            scrapping_process__id=obj.id
         )
         return self.__get_related_object_html(related_providers)
 
