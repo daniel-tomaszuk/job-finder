@@ -24,9 +24,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "test-secret-key")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("DEBUG", False)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [os.getenv("APP_BASE_URL")] if os.getenv("APP_BASE_URL") else []
+if DEBUG:
+    ALLOWED_HOSTS += [
+        "localhost",
+        "0.0.0.0",
+        "127.0.0.1",
+    ]
 
 
 # Application definition
@@ -78,6 +84,13 @@ WSGI_APPLICATION = "job_finder.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
+#  # TODO: ADD DATA MIGRATION - WHEN BOOTSTRAPPING, SOME SELECTORS SHOULD BE CREATED, POTENTIALLY WITH DESCRIPTION
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": BASE_DIR / "db.sqlite3",
+#     }
+# }
 
 DATABASES = {
     "default": {
@@ -125,6 +138,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = "static/"
+STATIC_ROOT = BASE_DIR / "static/"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field

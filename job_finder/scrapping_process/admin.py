@@ -7,12 +7,6 @@ from providers.models import Provider
 from scrapping_process.models import ScrappingProcess
 from scrapping_process.models import ScrappingStep
 from scrapping_process.models import Selector
-from scrapping_process.models import Seniority
-
-
-@admin.register(Seniority)
-class SeniorityAdmin(admin.ModelAdmin):
-    pass
 
 
 @admin.register(Selector)

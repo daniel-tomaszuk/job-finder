@@ -1,35 +1,6 @@
 from django.db import models
 
 
-class Seniority(models.Model):
-    class Keys:
-        id = "id"
-        name = "name"
-
-        # relations
-        provider_configs = "provider_configs"
-
-    class Meta:
-        verbose_name_plural = "seniorities"
-
-    class SeniorityName(models.TextChoices):
-        JUNIOR = "junior", "junior"
-        MID = "mid", "mid"
-        REGULAR = "regular", "regular"
-        SENIOR = "senior", "senior"
-        OTHER = "other", "other"
-
-    name = models.CharField(
-        max_length=16,
-        choices=SeniorityName,
-        default=SeniorityName.OTHER,
-        unique=True,
-    )
-
-    def __str__(self) -> str:
-        return self.name.title()
-
-
 class KeyWord(models.Model):
     class Keys:
         id = "id"

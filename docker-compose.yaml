@@ -44,3 +44,22 @@ services:
       - rabbitmq
     restart: on-failure
     <<: *env-vars
+
+  app-db-local:
+    image: "postgres:16-bookworm"
+    restart: always
+    ports:
+      - "5432:5432"
+    <<: *env-vars
+
+  web-app-local:
+    build:
+      dockerfile: ./Dockerfiles/Dockerfile.backend
+    depends_on:
+      - base
+      - app-db-local
+      - celery-worker
+      - celery-beat
+    ports:
+      - "8000:8000"
+    <<: *env-vars

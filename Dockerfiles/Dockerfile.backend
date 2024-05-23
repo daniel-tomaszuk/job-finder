@@ -1,0 +1,6 @@
+FROM base
+
+RUN chmod +x bootstrap.sh
+EXPOSE 8000
+
+CMD ./bootstrap.sh
