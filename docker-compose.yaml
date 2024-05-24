@@ -3,20 +3,20 @@ x-env-vars: &env-vars
     - .env.dev
 
 services:
-  base:
+  app-base:
     build:
       dockerfile: ./Dockerfiles/Dockerfile.base
       tags:
-        - base
+        - app-base
     <<: *env-vars
 
-  base-celery:
+  app-base-celery:
     build:
       dockerfile: ./Dockerfiles/Dockerfile.base.celery
       tags:
-        - base-celery
+        - app-base-celery
     depends_on:
-      - base
+      - app-base
     <<: *env-vars
 
   rabbitmq:
@@ -27,39 +27,39 @@ services:
       - "5672:5672"
       - "4368:4369"
 
-  celery-worker:
+  app-celery-worker:
     build:
       dockerfile: ./Dockerfiles/Dockerfile.celery
     depends_on:
-      - base-celery
+      - app-base-celery
       - rabbitmq
     restart: on-failure
     <<: *env-vars
 
-  celery-beat:
+  app-celery-beat:
     build:
       dockerfile: ./Dockerfiles/Dockerfile.celery.beat
     depends_on:
-      - base-celery
+      - app-base-celery
       - rabbitmq
     restart: on-failure
     <<: *env-vars
 
-  app-db-local:
+  app-db:
     image: "postgres:16-bookworm"
     restart: always
     ports:
       - "5432:5432"
     <<: *env-vars
 
-  web-app-local:
+  app-backend:
     build:
       dockerfile: ./Dockerfiles/Dockerfile.backend
     depends_on:
-      - base
-      - app-db-local
-      - celery-worker
-      - celery-beat
+      - app-base
+      - app-db
+      - app-celery-worker
+      - app-celery-beat
     ports:
       - "8000:8000"
     <<: *env-vars

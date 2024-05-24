@@ -1,4 +1,4 @@
-FROM base
+FROM app-base
 
 RUN chmod +x bootstrap.sh
 EXPOSE 8000

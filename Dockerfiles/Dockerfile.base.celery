@@ -1,4 +1,4 @@
-FROM base
+FROM app-base as app-base-celery
 
 # installs Firefox and Geckodriver to be used for scrapping
 RUN apt install firefox-esr --yes && apt install wget --yes
