@@ -22,7 +22,7 @@ celery_app.config_from_object("django.conf:settings", namespace="CELERY")
 celery_app.autodiscover_tasks(lambda: [n.name for n in apps.get_app_configs()])
 celery_app.conf.beat_schedule = {
     "get_provider_results": {
-        "task": "providers.tasks.get_provider_results",
+        "task": "providers.tasks.get_provider_results_in_bulk",
         "schedule": crontab(hour="*", minute="0"),
     },
 }

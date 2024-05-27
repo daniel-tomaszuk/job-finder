@@ -20,7 +20,7 @@ class JobOffer(models.Model):
         # relations
         provider = "provider"
 
-    link = models.CharField(max_length=512, unique=True)
+    link = models.CharField(max_length=1024, unique=True)
     short_description = models.CharField(max_length=1024, null=True, blank=True)
     provider = models.ForeignKey(
         Provider,

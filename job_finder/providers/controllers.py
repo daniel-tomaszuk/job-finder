@@ -19,7 +19,7 @@ from scrapping_process.models import Selector
 
 loggerr = logging.getLogger()
 
-SLEEP_SECONDS = 1.5
+SLEEP_SECONDS = 3
 
 
 class BrowserManager:
