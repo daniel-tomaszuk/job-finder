@@ -1,19 +1,16 @@
 from celery import shared_task
-from celery.schedules import crontab
 
-from job_finder import celery_app
 from providers.controllers import IndeedScrapperController
+from providers.models import Provider
 
 
-@shared_task
-def get_provider_results(provider_id: int) -> str:
-    IndeedScrapperController().get_results(provider_id)
+@shared_task()
+def get_provider_results(provider_id: int | None = None) -> str:
+    providers: list[int] = (
+        [provider_id]
+        if provider_id
+        else list(Provider.objects.all().values_list(Provider.Keys.id, flat=True))
+    )
+    for provider_id in providers:
+        IndeedScrapperController().get_results(provider_id)
     return f"New results gathered for Provider ID: {provider_id}"
-
-
-celery_app.conf.beat_schedule = {
-    "get_provider_results": {
-        "task": "tasks.get_provider_results",
-        "schedule": crontab(hour="12", minute="0"),
-    },
-}

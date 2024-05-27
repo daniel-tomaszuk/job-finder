@@ -9,6 +9,5 @@ from scrapping_process.data_migrations.load_initial_data import LoadInitialDataM
 
 class TestAPIView(APIView):  # TODO: REMOVE ME
     def get(self, request, format=None):
-        for provider in Provider.objects.all().only(Provider.Keys.id):
-            get_provider_results.delay(provider.id)
+        get_provider_results.delay()
         return Response()
